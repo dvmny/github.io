@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Deva Terapias | Equilíbrio e Cura em São Luís</title>
+    <style>
+        /* ----- VARIÁVEIS E TEMAS ----- */
+        :root {
+            /* Tema claro (padrão) */
+            --bg-body: #f9f5f0;          /* tom suave e uniforme */
+            --bg-section: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6e7a;
+            --header-bg: #2c3e50;
+            --header-text: #ffffff;
+            --footer-bg: #2c3e50;
+            --footer-text: #e0e0e0;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            --btn-primary: #8e44ad;
+            --btn-hover: #f39c12;
+            --accent: #f39c12;
+            --border-light: #eee;
+        }
+
+        body.dark {
+            --bg-body: #1e2a32;
+            --bg-section: #2c3e50;
+            --bg-card: #1f2c34;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --header-bg: #1a252f;
+            --footer-bg: #1a252f;
+            --footer-text: #bdc3c7;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            --btn-primary: #9b59b6;
+            --border-light: #3a4a5a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ----- HEADER (fixo) ----- */
+        header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        /* Botão tema (claro/escuro) */
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--header-text);
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+        .btn-agendar {
+            background: var(--btn-primary);
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .btn-agendar:hover {
+            background: var(--btn-hover);
+        }
+
+        /* ----- HERO ----- */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('hero-bg.jpg') center/cover no-repeat;
+            height: 85vh;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            margin-top: 70px;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: var(--btn-primary);
+            color: white;
+            padding: 12px 28px;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: var(--btn-hover);
+            transform: scale(1.03);
+        }
+
+        /* ----- SEÇÕES GERAIS ----- */
+        section {
+            padding: 70px 6% 50px;
+            background: var(--bg-section);
+            margin: 20px 0;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        /* Fundo uniforme suave: a seção "outros serviços" também será igual */
+        section:nth-child(even) {
+            background: var(--bg-section); /* removido o var(--light) original, agora uniforme */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            color: var(--text-primary);
+            position: relative;
+        }
+        h2:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 12px auto 0;
+            border-radius: 4px;
+        }
+
+        /* ----- GRID DE SERVIÇOS (cards melhorados) ----- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+        .card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            padding-bottom: 25px;
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            border: 1px solid var(--border-light);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2);
+        }
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        .card h3 {
+            margin: 20px 0 10px;
+            font-size: 1.6rem;
+            color: var(--text-primary);
+        }
+        .card p {
+            padding: 0 16px;
+            color: var(--text-secondary);
+        }
+        .price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--btn-primary);
+            margin: 15px 0;
+        }
+        .old-price {
+            text-decoration: line-through;
+            font-size: 1rem;
+            color: #888;
+            margin-right: 10px;
+        }
+        .badge {
+            background: var(--accent);
+            color: #2c3e50;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        /* ----- SEÇÃO OUTROS SERVIÇOS (texto melhor formatado) ----- */
+        .outros-servicos {
+            text-align: center;
+        }
+        .outros-servicos p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 12px auto;
+            background: rgba(0,0,0,0.02);
+            padding: 8px 20px;
+            border-radius: 60px;
+            display: inline-block;
+        }
+        .local-highlight {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* ----- FOOTER ----- */
+        .footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            text-align: center;
+            padding: 40px 20px 30px;
+            margin-top: 40px;
+            border-radius: 32px 32px 0 0;
+            width: 100%;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+        .credit-line {
+            font-size: 0.75rem;
+            margin-top: 20px;
+            opacity: 0.85;
+        }
+        .credit-line a {
+            color: var(--footer-text);
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(255,255,255,0.4);
+            font-weight: 500;
+        }
+        .credit-line a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .shield-icon {
+            display: inline-block;
+            font-size: 0.9rem;
+            margin-right: 4px;
+        }
+
+        /* ----- RESPONSIVIDADE MOBILE ----- */
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 5%;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .btn-agendar {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+            }
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+            .hero {
+                height: 70vh;
+                min-height: 420px;
+                margin-top: 65px;
+            }
+            section {
+                padding: 40px 5%;
+                width: 95%;
+            }
+            .card img {
+                height: 180px;
+            }
+            .price {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            .outros-servicos p {
+                font-size: 1rem;
+                padding: 6px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .grid {
+                gap: 20px;
+            }
+            .card h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><strong>DEVA TERAPIAS</strong></div>
+    <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro">🌙</button>
+        <a href="https://wa.me/5561998635141?text=Olá!%20Gostaria%20de%20agendar" class="btn-agendar">Agendar Agora</a>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Equilíbrio, Cura e Autoconhecimento</h1>
+    <p>Sua jornada de bem-estar começa aqui. Permita-se cuidar de você em São Luís - MA.</p>
+    <a href="#servicos" class="btn">Conhecer Terapias</a>
+</section>
+
+<section id="servicos">
+    <h2>Transforme sua Energia</h2>
+    <div class="grid">
+        <!-- Massagem Tântrica (descrição aprimorada) -->
+        <div class="card">
+            <img src="massagem-tantrica.jpg" alt="Massagem Tântrica">
+            <h3>✨ Massagem Tântrica</h3>
+            <p>Expansão da consciência corporal, liberação de bloqueios emocionais e profundo relaxamento sensorial.</p>
+            <p class="price">R$ 260,00</p>
+            <a href="https://wa.me/5561998635141?text=Olá!%20Gostaria%20de%20agendar%20uma%20sessão%20de%20Massagem%20Tântrica%20(R$%20260,00)" class="btn">Conversar com a Empresa</a>
+        </div>
+
+        <!-- Massagem Ayurvédica -->
+        <div class="card">
+            <img src="massagem-ayurvedica.jpg" alt="Massagem Ayurvédica">
+            <div><span class="badge">🌿 Oferta Especial</span></div>
+            <h3>🕉️ Massagem Ayurvédica</h3>
+            <p>Terapia milenar indiana com óleos quentes que harmoniza doshas, equilibra mente e revitaliza o espírito.</p>
+            <p class="price"><span class="old-price">R$ 299,00</span>R$ 199,00</p>
+            <a href="https://wa.me/5561998635141?text=Olá!%20Tenho%20interesse%20na%20promoção%20da%20Massagem%20Ayurvédica%20por%20R$%20199,00" class="btn">Aproveitar Oferta</a>
+        </div>
+
+        <!-- Massagem Terapêutica -->
+        <div class="card">
+            <img src="massagem-terapeutica.jpg" alt="Massagem Terapêutica">
+            <h3>💆 Massagem Terapêutica</h3>
+            <p>Mix personalizado: massoterapia, alongamento e ventosaterapia para aliviar tensões musculares e dores.</p>
+            <p class="price"><span class="old-price">R$ 221,90</span>R$ 149,90</p>
+            <a href="https://wa.me/5561998635141?text=Olá!%20Gostaria%20de%20agendar%20uma%20Massagem%20Terapêutica%20no%20valor%20de%20R$%20149,90" class="btn">Agendar Sessão</a>
+        </div>
+    </div>
+</section>
+
+<section class="outros-servicos" style="text-align: center;">
+    <h2>Outros Cuidados Integrativos</h2>
+    <p>✨ Reiki • 🧘 Yoga • 🧠 Meditação • 🎋 Acupuntura • 🌬️ Ventosaterapia • 🔺 Cone Hindu</p>
+    <p><span class="local-highlight">📍 Localização:</span> Atendimentos presenciais em São Luís - MA, com ambiente acolhedor e energizado.</p>
+    <p style="font-size: 0.9rem; margin-top: 20px;">💛 Todos os serviços são oferecidos com respeito, ética e foco no seu bem-estar integral.</p>
+</section>
+
+<footer class="footer">
+    <p><strong>Deva Terapias</strong></p>
+    <p>📸 Instagram: @devaamnytantra | 💬 WhatsApp: (61) 99863-5141</p>
+    <p>&copy; 2026 Deva Terapias. Todos os direitos reservados.</p>
+    
+    <!-- Crédito com escudo (mantido e aprimorado) -->
+    <div class="credit-line">
+        Produzido por: 
+        <span class="shield-icon">🛡️</span>
+        <a href="https://bunkerdigital.top" target="_blank" rel="noopener noreferrer">bunkerdigital.top</a>
+    </div>
+</footer>
+
+<script>
+    // Alternância entre modo claro e escuro + persistência local
+    (function() {
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.body;
+        
+        // Verifica preferência salva ou do sistema
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            root.classList.add('dark');
+            toggleBtn.textContent = '☀️';
+        } else if (savedTheme === 'light') {
+            root.classList.remove('dark');
+            toggleBtn.textContent = '🌙';
+        } else {
+            // Se não houver preferência, usa o tema claro (padrão)
+            root.classList.remove('dark');
+            toggleBtn.textContent = '🌙';
+        }
+        
+        toggleBtn.addEventListener('click', () => {
+            if (root.classList.contains('dark')) {
+                root.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.textContent = '🌙';
+            } else {
+                root.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.textContent = '☀️';
+            }
+        });
+    })();
+</script>
+
+<!-- Nota: as imagens (hero-bg.jpg, massagem-*.jpg) são ilustrativas. Substitua pelos arquivos reais. -->
+</body>
+</html>
